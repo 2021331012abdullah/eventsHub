@@ -34,8 +34,8 @@ export default async function EventDetailPage({ params }: { params: Params }) {
   }
 
   const isCreator = event.creatorId === session.user!.id;
-  const userTeam = event.teams.find((t) =>
-    t.members.some((m) => m.userId === session.user!.id)
+  const userTeam = event.teams.find((t: { members: { userId: string }[] }) =>
+    t.members.some((m: { userId: string }) => m.userId === session.user!.id)
   );
 
   const formatDate = (date: Date) => {
@@ -56,10 +56,10 @@ export default async function EventDetailPage({ params }: { params: Params }) {
   };
 
   // Filter visible teams
-  const visibleTeams = event.teams.filter((team) => {
+  const visibleTeams = event.teams.filter((team: { visibility: string; members: { userId: string }[] }) => {
     if (team.visibility === "PUBLIC") return true;
     // Private teams: only visible to members
-    return team.members.some((m) => m.userId === session.user!.id);
+    return team.members.some((m: { userId: string }) => m.userId === session.user!.id);
   });
 
   const durationStr = formatDuration(event.durationMinutes);
