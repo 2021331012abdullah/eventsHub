@@ -1,0 +1,168 @@
+.dashboard-welcome {
+  margin-bottom: var(--space-2xl);
+}
+
+.welcome-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  margin-bottom: var(--space-sm);
+}
+
+.welcome-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+/* ─── Stats Grid ───────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+  margin-bottom: var(--space-3xl);
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+}
+
+.stat-card:hover {
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+.stat-icon {
+  font-size: 2rem;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  line-height: 1;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ─── Dashboard Sections ───────────────────────────────── */
+.dashboard-section {
+  margin-bottom: var(--space-3xl);
+}
+
+/* ─── Invitations ──────────────────────────────────────── */
+.invitations-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.invitation-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.invitation-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.invitation-from {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.invitation-detail {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.invitation-team {
+  font-weight: 700;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+}
+
+.invitation-event {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+}
+
+.invitation-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* ─── Event Cards ──────────────────────────────────────── */
+.event-card {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.event-card:hover {
+  color: inherit;
+}
+
+.event-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.event-date {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+.event-card-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+.event-card-meta {
+  display: flex;
+  gap: var(--space-lg);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .invitation-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

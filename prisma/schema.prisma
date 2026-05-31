@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Auth.js Required Models ───────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── Application Models ────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  institution   String?
+  bio           String?   @db.Text
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts        Account[]
+  sessions        Session[]
+  createdEvents   Event[]        @relation("EventCreator")
+  createdTeams    Team[]         @relation("TeamCreator")
+  teamMemberships TeamMember[]
+  sentInvitations Invitation[]   @relation("InvitationSender")
+  receivedInvitations Invitation[] @relation("InvitationReceiver")
+}
+
+enum EventPrivacy {
+  PUBLIC
+  PRIVATE
+}
+
+model Event {
+  id              String       @id @default(cuid())
+  name            String
+  description     String?      @db.Text
+  date            DateTime
+  time            String?
+  durationMinutes Int?
+  website         String?
+  privacy         EventPrivacy @default(PUBLIC)
+  creatorId       String
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  creator User   @relation("EventCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  teams   Team[]
+
+  @@index([creatorId])
+  @@index([privacy])
+  @@index([date])
+}
+
+enum TeamVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+model Team {
+  id         String         @id @default(cuid())
+  name       String
+  eventId    String
+  creatorId  String
+  visibility TeamVisibility @default(PUBLIC)
+  createdAt  DateTime       @default(now())
+
+  event       Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  creator     User         @relation("TeamCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  members     TeamMember[]
+  invitations Invitation[]
+
+  @@index([eventId])
+  @@index([creatorId])
+}
+
+enum MemberRole {
+  LEADER
+  MEMBER
+}
+
+model TeamMember {
+  id       String     @id @default(cuid())
+  teamId   String
+  userId   String
+  role     MemberRole @default(MEMBER)
+  joinedAt DateTime   @default(now())
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@index([userId])
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+model Invitation {
+  id        String           @id @default(cuid())
+  teamId    String
+  inviterId String
+  inviteeId String
+  status    InvitationStatus @default(PENDING)
+  createdAt DateTime         @default(now())
+
+  team    Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  inviter User @relation("InvitationSender", fields: [inviterId], references: [id], onDelete: Cascade)
+  invitee User @relation("InvitationReceiver", fields: [inviteeId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, inviteeId])
+  @@index([inviteeId, status])
+  @@index([inviterId])
+}
