@@ -29,8 +29,8 @@ export async function GET(request: NextRequest) {
     });
     excludeUserIds = [
       ...excludeUserIds,
-      ...members.map((m) => m.userId),
-      ...pendingInvites.map((i) => i.inviteeId),
+      ...members.map((m: { userId: string }) => m.userId),
+      ...pendingInvites.map((i: { inviteeId: string }) => i.inviteeId),
     ];
   }
 
