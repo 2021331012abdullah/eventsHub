@@ -152,7 +152,14 @@ export default async function DashboardPage() {
           </div>
           {recentEvents.length > 0 ? (
             <div className="grid-cards">
-              {recentEvents.map((event) => (
+              {recentEvents.map((event: {
+                id: string;
+                name: string;
+                privacy: string;
+                date: Date;
+                time: string | null;
+                _count: { teams: number };
+              }) => (
                 <Link
                   key={event.id}
                   href={`/events/${event.id}`}
