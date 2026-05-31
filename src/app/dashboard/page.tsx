@@ -102,7 +102,11 @@ export default async function DashboardPage() {
               </div>
             </div>
             <div className="invitations-list">
-              {pendingInvitations.map((inv) => (
+              {pendingInvitations.map((inv: {
+                id: string;
+                inviter: { name: string | null; image: string | null };
+                team: { name: string; event: { name: string } };
+              }) => (
                 <div key={inv.id} className="invitation-card glass-card">
                   <div className="invitation-info">
                     <div className="invitation-from">
