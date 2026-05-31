@@ -32,7 +32,16 @@ export default async function MyTeamsPage() {
 
         {memberships.length > 0 ? (
           <div className="grid-cards animate-fade-in">
-            {memberships.map((membership) => (
+            {memberships.map((membership: {
+              id: string;
+              role: string;
+              team: {
+                id: string;
+                name: string;
+                event: { id: string; name: string; date: Date; privacy: string };
+                _count: { members: number };
+              };
+            }) => (
               <Link
                 key={membership.id}
                 href={`/events/${membership.team.event.id}/teams/${membership.team.id}`}

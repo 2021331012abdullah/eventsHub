@@ -34,9 +34,9 @@ export default async function TeamDetailPage({ params }: { params: Params }) {
   }
 
   const isLeader = team.members.some(
-    (m) => m.userId === session.user!.id && m.role === "LEADER"
+    (m: { userId: string; role: string }) => m.userId === session.user!.id && m.role === "LEADER"
   );
-  const isMember = team.members.some((m) => m.userId === session.user!.id);
+  const isMember = team.members.some((m: { userId: string }) => m.userId === session.user!.id);
 
   return (
     <div className="page-wrapper">
